@@ -1,0 +1,586 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CercleCulturalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Esdeveniment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nom" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="descripcio" Type="text" />
+          <Property Name="dataInici" Type="datetime" Nullable="false" />
+          <Property Name="dataFi" Type="datetime" Nullable="false" />
+          <Property Name="aforament" Type="int" Nullable="false" />
+          <Property Name="espai_id" Type="int" Nullable="false" />
+          <Property Name="usuari_id" Type="int" Nullable="false" />
+          <Property Name="imatge" Type="varchar" MaxLength="255" />
+          <Property Name="per_infants" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Espai">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nom" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="capacitat" Type="int" Nullable="false" />
+          <Property Name="ubicacio" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="metres_quadrats" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="butaques_fixes" Type="bit" Nullable="false" />
+          <Property Name="num_files" Type="int" />
+          <Property Name="num_butaques_per_fila" Type="int" />
+        </EntityType>
+        <EntityType Name="Mensajes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuari_id" Type="int" Nullable="false" />
+          <Property Name="nom_usuari" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="missatge" Type="text" Nullable="false" />
+          <Property Name="dataEnviament" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reserva">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuari_id" Type="int" Nullable="false" />
+          <Property Name="dataReserva" Type="datetime" Nullable="false" />
+          <Property Name="estat" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="tipus" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="espai_id" Type="int" />
+          <Property Name="esdeveniment_id" Type="int" />
+          <Property Name="dataInici" Type="datetime" />
+          <Property Name="dataFi" Type="datetime" />
+          <Property Name="numPlaces" Type="int" />
+        </EntityType>
+        <EntityType Name="ReservaSeient">
+          <Key>
+            <PropertyRef Name="reserva_id" />
+            <PropertyRef Name="seient_id" />
+          </Key>
+          <Property Name="reserva_id" Type="int" Nullable="false" />
+          <Property Name="seient_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Seients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="espai_id" Type="int" Nullable="false" />
+          <Property Name="numerat" Type="bit" Nullable="false" />
+          <Property Name="fila" Type="varchar" MaxLength="10" />
+          <Property Name="columna" Type="varchar" MaxLength="10" />
+          <Property Name="estat" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Usuari">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nom" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="contrasenya" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="tipusUsuari" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="idioma" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK__Esdevenim__espai__4316F928">
+          <End Role="Espai" Type="Self.Espai" Multiplicity="1" />
+          <End Role="Esdeveniment" Type="Self.Esdeveniment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espai">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Esdeveniment">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Esdevenim__usuar__440B1D61">
+          <End Role="Usuari" Type="Self.Usuari" Multiplicity="1" />
+          <End Role="Esdeveniment" Type="Self.Esdeveniment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuari">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Esdeveniment">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Mensajes__usuari__5CD6CB2B">
+          <End Role="Usuari" Type="Self.Usuari" Multiplicity="1" />
+          <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuari">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Mensajes">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__esdeven__5441852A">
+          <End Role="Esdeveniment" Type="Self.Esdeveniment" Multiplicity="0..1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Esdeveniment">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="esdeveniment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__espai_i__534D60F1">
+          <End Role="Espai" Type="Self.Espai" Multiplicity="0..1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espai">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__usuari___52593CB8">
+          <End Role="Usuari" Type="Self.Usuari" Multiplicity="1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuari">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReservaSe__reser__5812160E">
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="1" />
+          <End Role="ReservaSeient" Type="Self.ReservaSeient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reserva">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReservaSeient">
+              <PropertyRef Name="reserva_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReservaSe__seien__59063A47">
+          <End Role="Seients" Type="Self.Seients" Multiplicity="1" />
+          <End Role="ReservaSeient" Type="Self.ReservaSeient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seients">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReservaSeient">
+              <PropertyRef Name="seient_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Seients__espai_i__4AB81AF0">
+          <End Role="Espai" Type="Self.Espai" Multiplicity="1" />
+          <End Role="Seients" Type="Self.Seients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espai">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Seients">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CercleCulturalModelStoreContainer">
+          <EntitySet Name="Esdeveniment" EntityType="Self.Esdeveniment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Espai" EntityType="Self.Espai" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mensajes" EntityType="Self.Mensajes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reserva" EntityType="Self.Reserva" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReservaSeient" EntityType="Self.ReservaSeient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seients" EntityType="Self.Seients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuari" EntityType="Self.Usuari" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Esdevenim__espai__4316F928" Association="Self.FK__Esdevenim__espai__4316F928">
+            <End Role="Espai" EntitySet="Espai" />
+            <End Role="Esdeveniment" EntitySet="Esdeveniment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Esdevenim__usuar__440B1D61" Association="Self.FK__Esdevenim__usuar__440B1D61">
+            <End Role="Usuari" EntitySet="Usuari" />
+            <End Role="Esdeveniment" EntitySet="Esdeveniment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Mensajes__usuari__5CD6CB2B" Association="Self.FK__Mensajes__usuari__5CD6CB2B">
+            <End Role="Usuari" EntitySet="Usuari" />
+            <End Role="Mensajes" EntitySet="Mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__esdeven__5441852A" Association="Self.FK__Reserva__esdeven__5441852A">
+            <End Role="Esdeveniment" EntitySet="Esdeveniment" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__espai_i__534D60F1" Association="Self.FK__Reserva__espai_i__534D60F1">
+            <End Role="Espai" EntitySet="Espai" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__usuari___52593CB8" Association="Self.FK__Reserva__usuari___52593CB8">
+            <End Role="Usuari" EntitySet="Usuari" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReservaSe__reser__5812160E" Association="Self.FK__ReservaSe__reser__5812160E">
+            <End Role="Reserva" EntitySet="Reserva" />
+            <End Role="ReservaSeient" EntitySet="ReservaSeient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReservaSe__seien__59063A47" Association="Self.FK__ReservaSe__seien__59063A47">
+            <End Role="Seients" EntitySet="Seients" />
+            <End Role="ReservaSeient" EntitySet="ReservaSeient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Seients__espai_i__4AB81AF0" Association="Self.FK__Seients__espai_i__4AB81AF0">
+            <End Role="Espai" EntitySet="Espai" />
+            <End Role="Seients" EntitySet="Seients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CercleCulturalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Esdeveniment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nom" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="dataInici" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dataFi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="aforament" Type="Int32" Nullable="false" />
+          <Property Name="espai_id" Type="Int32" Nullable="false" />
+          <Property Name="usuari_id" Type="Int32" Nullable="false" />
+          <Property Name="imatge" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="per_infants" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Espai" Relationship="Self.FK__Esdevenim__espai__4316F928" FromRole="Esdeveniment" ToRole="Espai" />
+          <NavigationProperty Name="Usuari" Relationship="Self.FK__Esdevenim__usuar__440B1D61" FromRole="Esdeveniment" ToRole="Usuari" />
+          <NavigationProperty Name="Reserva" Relationship="Self.FK__Reserva__esdeven__5441852A" FromRole="Esdeveniment" ToRole="Reserva" />
+        </EntityType>
+        <EntityType Name="Espai">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nom" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="capacitat" Type="Int32" Nullable="false" />
+          <Property Name="ubicacio" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="metres_quadrats" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="butaques_fixes" Type="Boolean" Nullable="false" />
+          <Property Name="num_files" Type="Int32" />
+          <Property Name="num_butaques_per_fila" Type="Int32" />
+          <NavigationProperty Name="Esdeveniment" Relationship="Self.FK__Esdevenim__espai__4316F928" FromRole="Espai" ToRole="Esdeveniment" />
+          <NavigationProperty Name="Reserva" Relationship="Self.FK__Reserva__espai_i__534D60F1" FromRole="Espai" ToRole="Reserva" />
+          <NavigationProperty Name="Seients" Relationship="Self.FK__Seients__espai_i__4AB81AF0" FromRole="Espai" ToRole="Seients" />
+        </EntityType>
+        <EntityType Name="Mensajes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuari_id" Type="Int32" Nullable="false" />
+          <Property Name="nom_usuari" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="missatge" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dataEnviament" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Usuari" Relationship="Self.FK__Mensajes__usuari__5CD6CB2B" FromRole="Mensajes" ToRole="Usuari" />
+        </EntityType>
+        <EntityType Name="Reserva">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuari_id" Type="Int32" Nullable="false" />
+          <Property Name="dataReserva" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="estat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="espai_id" Type="Int32" />
+          <Property Name="esdeveniment_id" Type="Int32" />
+          <Property Name="dataInici" Type="DateTime" Precision="3" />
+          <Property Name="dataFi" Type="DateTime" Precision="3" />
+          <Property Name="numPlaces" Type="Int32" />
+          <NavigationProperty Name="Esdeveniment" Relationship="Self.FK__Reserva__esdeven__5441852A" FromRole="Reserva" ToRole="Esdeveniment" />
+          <NavigationProperty Name="Espai" Relationship="Self.FK__Reserva__espai_i__534D60F1" FromRole="Reserva" ToRole="Espai" />
+          <NavigationProperty Name="Usuari" Relationship="Self.FK__Reserva__usuari___52593CB8" FromRole="Reserva" ToRole="Usuari" />
+          <NavigationProperty Name="Seients" Relationship="Self.ReservaSeient" FromRole="Reserva" ToRole="Seients" />
+        </EntityType>
+        <EntityType Name="Seients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="espai_id" Type="Int32" Nullable="false" />
+          <Property Name="numerat" Type="Boolean" Nullable="false" />
+          <Property Name="fila" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="columna" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="estat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Espai" Relationship="Self.FK__Seients__espai_i__4AB81AF0" FromRole="Seients" ToRole="Espai" />
+          <NavigationProperty Name="Reserva" Relationship="Self.ReservaSeient" FromRole="Seients" ToRole="Reserva" />
+        </EntityType>
+        <EntityType Name="Usuari">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nom" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contrasenya" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipusUsuari" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idioma" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Esdeveniment" Relationship="Self.FK__Esdevenim__usuar__440B1D61" FromRole="Usuari" ToRole="Esdeveniment" />
+          <NavigationProperty Name="Mensajes" Relationship="Self.FK__Mensajes__usuari__5CD6CB2B" FromRole="Usuari" ToRole="Mensajes" />
+          <NavigationProperty Name="Reserva" Relationship="Self.FK__Reserva__usuari___52593CB8" FromRole="Usuari" ToRole="Reserva" />
+        </EntityType>
+        <Association Name="FK__Esdevenim__espai__4316F928">
+          <End Role="Espai" Type="Self.Espai" Multiplicity="1" />
+          <End Role="Esdeveniment" Type="Self.Esdeveniment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espai">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Esdeveniment">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Esdevenim__usuar__440B1D61">
+          <End Role="Usuari" Type="Self.Usuari" Multiplicity="1" />
+          <End Role="Esdeveniment" Type="Self.Esdeveniment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuari">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Esdeveniment">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__esdeven__5441852A">
+          <End Role="Esdeveniment" Type="Self.Esdeveniment" Multiplicity="0..1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Esdeveniment">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="esdeveniment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__espai_i__534D60F1">
+          <End Role="Espai" Type="Self.Espai" Multiplicity="0..1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espai">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Seients__espai_i__4AB81AF0">
+          <End Role="Espai" Type="Self.Espai" Multiplicity="1" />
+          <End Role="Seients" Type="Self.Seients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espai">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Seients">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Mensajes__usuari__5CD6CB2B">
+          <End Role="Usuari" Type="Self.Usuari" Multiplicity="1" />
+          <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuari">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Mensajes">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__usuari___52593CB8">
+          <End Role="Usuari" Type="Self.Usuari" Multiplicity="1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuari">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReservaSeient">
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <End Role="Seients" Type="Self.Seients" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="CercleCulturalEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Esdeveniment" EntityType="Self.Esdeveniment" />
+          <EntitySet Name="Espai" EntityType="Self.Espai" />
+          <EntitySet Name="Mensajes" EntityType="Self.Mensajes" />
+          <EntitySet Name="Reserva" EntityType="Self.Reserva" />
+          <EntitySet Name="Seients" EntityType="Self.Seients" />
+          <EntitySet Name="Usuari" EntityType="Self.Usuari" />
+          <AssociationSet Name="FK__Esdevenim__espai__4316F928" Association="Self.FK__Esdevenim__espai__4316F928">
+            <End Role="Espai" EntitySet="Espai" />
+            <End Role="Esdeveniment" EntitySet="Esdeveniment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Esdevenim__usuar__440B1D61" Association="Self.FK__Esdevenim__usuar__440B1D61">
+            <End Role="Usuari" EntitySet="Usuari" />
+            <End Role="Esdeveniment" EntitySet="Esdeveniment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__esdeven__5441852A" Association="Self.FK__Reserva__esdeven__5441852A">
+            <End Role="Esdeveniment" EntitySet="Esdeveniment" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__espai_i__534D60F1" Association="Self.FK__Reserva__espai_i__534D60F1">
+            <End Role="Espai" EntitySet="Espai" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Seients__espai_i__4AB81AF0" Association="Self.FK__Seients__espai_i__4AB81AF0">
+            <End Role="Espai" EntitySet="Espai" />
+            <End Role="Seients" EntitySet="Seients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Mensajes__usuari__5CD6CB2B" Association="Self.FK__Mensajes__usuari__5CD6CB2B">
+            <End Role="Usuari" EntitySet="Usuari" />
+            <End Role="Mensajes" EntitySet="Mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__usuari___52593CB8" Association="Self.FK__Reserva__usuari___52593CB8">
+            <End Role="Usuari" EntitySet="Usuari" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="ReservaSeient" Association="Self.ReservaSeient">
+            <End Role="Reserva" EntitySet="Reserva" />
+            <End Role="Seients" EntitySet="Seients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CercleCulturalModelStoreContainer" CdmEntityContainer="CercleCulturalEntities2">
+          <EntitySetMapping Name="Esdeveniment">
+            <EntityTypeMapping TypeName="CercleCulturalModel.Esdeveniment">
+              <MappingFragment StoreEntitySet="Esdeveniment">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="descripcio" ColumnName="descripcio" />
+                <ScalarProperty Name="dataInici" ColumnName="dataInici" />
+                <ScalarProperty Name="dataFi" ColumnName="dataFi" />
+                <ScalarProperty Name="aforament" ColumnName="aforament" />
+                <ScalarProperty Name="espai_id" ColumnName="espai_id" />
+                <ScalarProperty Name="usuari_id" ColumnName="usuari_id" />
+                <ScalarProperty Name="imatge" ColumnName="imatge" />
+                <ScalarProperty Name="per_infants" ColumnName="per_infants" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Espai">
+            <EntityTypeMapping TypeName="CercleCulturalModel.Espai">
+              <MappingFragment StoreEntitySet="Espai">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="capacitat" ColumnName="capacitat" />
+                <ScalarProperty Name="ubicacio" ColumnName="ubicacio" />
+                <ScalarProperty Name="metres_quadrats" ColumnName="metres_quadrats" />
+                <ScalarProperty Name="butaques_fixes" ColumnName="butaques_fixes" />
+                <ScalarProperty Name="num_files" ColumnName="num_files" />
+                <ScalarProperty Name="num_butaques_per_fila" ColumnName="num_butaques_per_fila" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mensajes">
+            <EntityTypeMapping TypeName="CercleCulturalModel.Mensajes">
+              <MappingFragment StoreEntitySet="Mensajes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuari_id" ColumnName="usuari_id" />
+                <ScalarProperty Name="nom_usuari" ColumnName="nom_usuari" />
+                <ScalarProperty Name="missatge" ColumnName="missatge" />
+                <ScalarProperty Name="dataEnviament" ColumnName="dataEnviament" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reserva">
+            <EntityTypeMapping TypeName="CercleCulturalModel.Reserva">
+              <MappingFragment StoreEntitySet="Reserva">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuari_id" ColumnName="usuari_id" />
+                <ScalarProperty Name="dataReserva" ColumnName="dataReserva" />
+                <ScalarProperty Name="estat" ColumnName="estat" />
+                <ScalarProperty Name="tipus" ColumnName="tipus" />
+                <ScalarProperty Name="espai_id" ColumnName="espai_id" />
+                <ScalarProperty Name="esdeveniment_id" ColumnName="esdeveniment_id" />
+                <ScalarProperty Name="dataInici" ColumnName="dataInici" />
+                <ScalarProperty Name="dataFi" ColumnName="dataFi" />
+                <ScalarProperty Name="numPlaces" ColumnName="numPlaces" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seients">
+            <EntityTypeMapping TypeName="CercleCulturalModel.Seients">
+              <MappingFragment StoreEntitySet="Seients">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="espai_id" ColumnName="espai_id" />
+                <ScalarProperty Name="numerat" ColumnName="numerat" />
+                <ScalarProperty Name="fila" ColumnName="fila" />
+                <ScalarProperty Name="columna" ColumnName="columna" />
+                <ScalarProperty Name="estat" ColumnName="estat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuari">
+            <EntityTypeMapping TypeName="CercleCulturalModel.Usuari">
+              <MappingFragment StoreEntitySet="Usuari">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="contrasenya" ColumnName="contrasenya" />
+                <ScalarProperty Name="tipusUsuari" ColumnName="tipusUsuari" />
+                <ScalarProperty Name="idioma" ColumnName="idioma" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ReservaSeient" TypeName="CercleCulturalModel.ReservaSeient" StoreEntitySet="ReservaSeient">
+            <EndProperty Name="Reserva">
+              <ScalarProperty Name="id" ColumnName="reserva_id" />
+            </EndProperty>
+            <EndProperty Name="Seients">
+              <ScalarProperty Name="id" ColumnName="seient_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
