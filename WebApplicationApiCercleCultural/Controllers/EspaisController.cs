@@ -18,6 +18,11 @@ namespace WebApplicationApiCercleCultural.Controllers
         private CercleCulturalEntities2 db = new CercleCulturalEntities2();
 
         // GET: api/Espais
+
+        public EspaisController()
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+        }
         public IQueryable<Espai> GetEspai()
         {
             return db.Espai;
@@ -112,7 +117,7 @@ namespace WebApplicationApiCercleCultural.Controllers
             await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = espai.id }, espai);
-        }
+        }   
 
         // DELETE: api/Espais/5
         [ResponseType(typeof(Espai))]

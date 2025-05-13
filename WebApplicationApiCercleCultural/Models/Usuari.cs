@@ -28,6 +28,7 @@ namespace WebApplicationApiCercleCultural.Models
         public string contrasenya { get; set; }
         public string tipusUsuari { get; set; }
         public string idioma { get; set; }
+        public string FotoPerfil { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Esdeveniment> Esdeveniment { get; set; }

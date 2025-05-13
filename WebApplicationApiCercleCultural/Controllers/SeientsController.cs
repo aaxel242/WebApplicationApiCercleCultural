@@ -17,6 +17,11 @@ namespace WebApplicationApiCercleCultural.Controllers
     {
         private CercleCulturalEntities2 db = new CercleCulturalEntities2();
 
+        public SeientsController()
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+        }
+
         // GET: api/Seients
         public IQueryable<Seients> GetSeients()
         {

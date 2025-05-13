@@ -17,6 +17,11 @@ namespace WebApplicationApiCercleCultural.Controllers
     {
         private CercleCulturalEntities2 db = new CercleCulturalEntities2();
 
+        public ReservasController()
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+        }
+
         // GET: api/Reservas
         public IQueryable<Reserva> GetReserva()
         {

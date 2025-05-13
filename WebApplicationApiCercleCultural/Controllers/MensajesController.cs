@@ -10,11 +10,16 @@ using System.Web.Http.Description;
 using WebApplicationApiCercleCultural.Models;
 
 namespace WebApplicationApiCercleCultural.Controllers
-{
+{   
     public class MensajesController : ApiController
     {
+
         private CercleCulturalEntities2 db = new CercleCulturalEntities2();
 
+        public MensajesController()
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+        }
         // GET: api/Mensajes
         public IQueryable<Mensajes> GetMensajes()
         {

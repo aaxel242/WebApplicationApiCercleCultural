@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApplicationApiCercleCultural.Models;
 using WebApplicationApiCercleCultural.Models.DTOs;
+using WebApplicationApiCercleCultural.Services;
 
 namespace WebApplicationApiCercleCultural.Controllers
 {
@@ -18,12 +21,17 @@ namespace WebApplicationApiCercleCultural.Controllers
     {
         private CercleCulturalEntities2 db = new CercleCulturalEntities2();
 
+        public UsuarisController()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+        }
+
         // GET: api/Usuaris
         public IQueryable<Usuari> GetUsuari()
         {
             db.Configuration.LazyLoadingEnabled = false;
             return db.Usuari;
-        }
+        }   
 
         // GET: api/Usuaris/5
         [ResponseType(typeof(Usuari))]
@@ -36,7 +44,7 @@ namespace WebApplicationApiCercleCultural.Controllers
             }
 
             return Ok(usuari);
-        }
+        }   
 
 
         // GET: api/Usuaris/UsuarisPerfil
@@ -234,6 +242,92 @@ namespace WebApplicationApiCercleCultural.Controllers
         private bool UsuariExists(int id)
         {
             return db.Usuari.Count(e => e.id == id) > 0;
+        }
+
+        [HttpPost]
+        [Route("api/Usuaris/UploadImage/{id}")]
+        public async Task<IHttpActionResult> UploadImage(int id)
+        {
+            try
+            {
+                var httpRequest = HttpContext.Current.Request;
+                if (httpRequest.Files.Count == 0)
+                    return BadRequest("No se envió ninguna imagen");
+
+                var file = httpRequest.Files[0];
+
+                // Crear una instancia de ImageService
+                var imageService = new ImageService();
+
+                // Guardar imagen
+                var fileName = imageService.SaveImage(file);
+
+                // Actualizar usuario
+                var usuario = await db.Usuari.FindAsync(id);
+                if (usuario == null)
+                    return NotFound();
+
+                usuario.FotoPerfil = fileName; // Asegúrate que este campo existe en tu modelo
+                await db.SaveChangesAsync();
+
+                return Ok(new { FileName = fileName });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/Usuaris/GetImage/nombre.jpg
+        [HttpGet]
+        [Route("api/Usuaris/GetImage/{fileName}")]
+        public IHttpActionResult GetImage(string fileName)
+        {
+            try
+            {
+                // Crear una instancia de ImageService
+                var imageService = new ImageService();
+
+                // Usar la instancia para llamar a GetImagePath
+                var imagePath = imageService.GetImagePath(fileName);
+
+                if (!File.Exists(imagePath))
+                    return NotFound();
+
+                var response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new StreamContent(new FileStream(imagePath, FileMode.Open));
+                response.Content.Headers.ContentType =
+                    new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+
+                return ResponseMessage(response);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+    }
+
+    // Clase auxiliar para devolver el FileStream
+    public class FileStreamResult : IHttpActionResult
+    {
+        private readonly FileStream _stream;
+        private readonly string _mediaType;
+
+        public FileStreamResult(FileStream stream, string mediaType)
+        {
+            _stream = stream;
+            _mediaType = mediaType;
+        }
+
+        public Task<HttpResponseMessage> ExecuteAsync(System.Threading.CancellationToken cancellationToken)
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StreamContent(_stream)
+            };
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(_mediaType);
+            return Task.FromResult(response);
         }
     }
 }
