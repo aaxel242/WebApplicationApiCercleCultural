@@ -121,11 +121,20 @@ namespace WebApplicationApiCercleCultural.Controllers
         [ResponseType(typeof(Reserva))]
         public async Task<IHttpActionResult> PostReserva([FromBody] ReservaRequest req)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (req == null || !ModelState.IsValid)
+                return BadRequest("Datos de reserva inválidos");
 
-            // Mapea manualmente de DTO a entidad
-            var reserva = new Reserva
+            // Validación manual de campos críticos
+            if (req.usuari_id <= 0 || req.esdeveniment_id <= 0 || req.espai_id <= 0)
+                return BadRequest("IDs de usuario, evento o espacio no válidos");
+
+            if (req.dataInici >= req.dataFi)
+                return BadRequest("La fecha de inicio debe ser anterior a la de fin");
+
+            try
+            {
+                // Mapea manualmente de DTO a entidad
+                var reserva = new Reserva
             {
                 usuari_id = req.usuari_id,
                 esdeveniment_id = req.esdeveniment_id,
@@ -136,7 +145,6 @@ namespace WebApplicationApiCercleCultural.Controllers
                 dataInici = req.dataInici,
                 dataFi = req.dataFi,
                 numPlaces = req.numPlaces
-                // NO toques Esdeveniment, Espai, Usuari ni Seients aquí
             };
 
             db.Reserva.Add(reserva);
@@ -145,8 +153,15 @@ namespace WebApplicationApiCercleCultural.Controllers
             return CreatedAtRoute("DefaultApi", new { id = reserva.id }, reserva);
         }
 
-        // DELETE: api/Reservas/5
-        [ResponseType(typeof(Reserva))]
+        catch (DbUpdateException ex)
+         {
+        // Log del error (ex.InnerException.Message)
+        return InternalServerError(new Exception("Error al guardar en base de datos"));
+          }
+}
+
+// DELETE: api/Reservas/5
+[ResponseType(typeof(Reserva))]
         public async Task<IHttpActionResult> DeleteReserva(int id)
         {
             Reserva reserva = await db.Reserva.FindAsync(id);
