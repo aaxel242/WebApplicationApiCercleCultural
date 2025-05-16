@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApplicationApiCercleCultural.Models;
+using WebApplicationApiCercleCultural.Models.DTOs;
 
 namespace WebApplicationApiCercleCultural.Controllers
 {
@@ -118,12 +119,25 @@ namespace WebApplicationApiCercleCultural.Controllers
 
         // POST: api/Reservas
         [ResponseType(typeof(Reserva))]
-        public async Task<IHttpActionResult> PostReserva(Reserva reserva)
+        public async Task<IHttpActionResult> PostReserva([FromBody] ReservaRequest req)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
+
+            // Mapea manualmente de DTO a entidad
+            var reserva = new Reserva
+            {
+                usuari_id = req.usuari_id,
+                esdeveniment_id = req.esdeveniment_id,
+                espai_id = req.espai_id,
+                dataReserva = req.dataReserva,
+                estat = req.estat,
+                tipus = req.tipus,
+                dataInici = req.dataInici,
+                dataFi = req.dataFi,
+                numPlaces = req.numPlaces
+                // NO toques Esdeveniment, Espai, Usuari ni Seients aquí
+            };
 
             db.Reserva.Add(reserva);
             await db.SaveChangesAsync();

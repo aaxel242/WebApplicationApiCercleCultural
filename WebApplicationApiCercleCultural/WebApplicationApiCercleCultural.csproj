@@ -165,6 +165,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DTOs\MensajesDTO.cs" />
+    <Compile Include="Models\DTOs\ReservaRequest.cs" />
     <Compile Include="Models\DTOs\UsuarisPerfilConfiguracion.cs" />
     <Compile Include="Models\DTOs\UsuarisPerfilConfiguracionCambiarContrasenyaDTO.cs" />
     <Compile Include="Models\Esdeveniment.cs">

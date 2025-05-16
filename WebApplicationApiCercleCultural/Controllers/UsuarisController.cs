@@ -252,29 +252,36 @@ namespace WebApplicationApiCercleCultural.Controllers
             {
                 var httpRequest = HttpContext.Current.Request;
                 if (httpRequest.Files.Count == 0)
+                {
                     return BadRequest("No se envió ninguna imagen");
+                }
 
                 var file = httpRequest.Files[0];
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var folderPath = HttpContext.Current.Server.MapPath("~/imagenes");
 
-                // Crear una instancia de ImageService
-                var imageService = new ImageService();
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
 
-                // Guardar imagen
-                var fileName = imageService.SaveImage(file);
+                var filePath = Path.Combine(folderPath, fileName);
+                file.SaveAs(filePath);
 
-                // Actualizar usuario
                 var usuario = await db.Usuari.FindAsync(id);
                 if (usuario == null)
+                {
                     return NotFound();
+                }
 
-                usuario.FotoPerfil = fileName; // Asegúrate que este campo existe en tu modelo
+                usuario.FotoPerfil = fileName;
                 await db.SaveChangesAsync();
 
-                return Ok(new { FileName = fileName });
+                return Ok(new { fileName });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return InternalServerError(ex);
             }
         }
 
