@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Formatting;
 using System.Web.Http;
+using WebApplicationApiCercleCultural.Controllers;
 
 namespace WebApplicationApiCercleCultural
 {
@@ -9,10 +12,8 @@ namespace WebApplicationApiCercleCultural
     {
         public static void Register(HttpConfiguration config)
         {
-            // Configuración y servicios de Web API
-
-            config.Formatters.Remove(config.Formatters.XmlFormatter);
-            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            var json = config.Formatters.JsonFormatter;
+            json.SerializerSettings.ContractResolver = new DefaultContractResolver();
 
             json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;

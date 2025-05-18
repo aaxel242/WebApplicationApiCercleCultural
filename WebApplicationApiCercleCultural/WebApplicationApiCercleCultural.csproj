@@ -161,6 +161,7 @@
     <Compile Include="Controllers\UsuarisController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data\WebApplicationApiCercleCulturalContext.cs" />
+    <Compile Include="Formatters\Formatters.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -169,37 +170,37 @@
     <Compile Include="Models\DTOs\UsuarisPerfilConfiguracion.cs" />
     <Compile Include="Models\DTOs\UsuarisPerfilConfiguracionCambiarContrasenyaDTO.cs" />
     <Compile Include="Models\Esdeveniment.cs">
-      <DependentUpon>ModelCCApi.tt</DependentUpon>
+      <DependentUpon>ModelCC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Espai.cs">
-      <DependentUpon>ModelCCApi.tt</DependentUpon>
+      <DependentUpon>ModelCC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Mensajes.cs">
-      <DependentUpon>ModelCCApi.tt</DependentUpon>
+      <DependentUpon>ModelCC.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModelCCApi.Context.cs">
+    <Compile Include="Models\ModelCC.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelCCApi.Context.tt</DependentUpon>
+      <DependentUpon>ModelCC.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModelCCApi.cs">
+    <Compile Include="Models\ModelCC.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelCCApi.tt</DependentUpon>
+      <DependentUpon>ModelCC.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModelCCApi.Designer.cs">
+    <Compile Include="Models\ModelCC.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ModelCCApi.edmx</DependentUpon>
+      <DependentUpon>ModelCC.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Reserva.cs">
-      <DependentUpon>ModelCCApi.tt</DependentUpon>
+      <DependentUpon>ModelCC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Seients.cs">
-      <DependentUpon>ModelCCApi.tt</DependentUpon>
+      <DependentUpon>ModelCC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuari.cs">
-      <DependentUpon>ModelCCApi.tt</DependentUpon>
+      <DependentUpon>ModelCC.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ImageService.cs" />
@@ -224,15 +225,15 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Models\ModelCCApi.Context.tt">
+    <Content Include="Models\ModelCC.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelCCApi.edmx</DependentUpon>
-      <LastGenOutput>ModelCCApi.Context.cs</LastGenOutput>
+      <DependentUpon>ModelCC.edmx</DependentUpon>
+      <LastGenOutput>ModelCC.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\ModelCCApi.tt">
+    <Content Include="Models\ModelCC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelCCApi.edmx</DependentUpon>
-      <LastGenOutput>ModelCCApi.cs</LastGenOutput>
+      <DependentUpon>ModelCC.edmx</DependentUpon>
+      <LastGenOutput>ModelCC.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -259,12 +260,12 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <EntityDeploy Include="Models\ModelCCApi.edmx">
+    <EntityDeploy Include="Models\ModelCC.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelCCApi.Designer.cs</LastGenOutput>
+      <LastGenOutput>ModelCC.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\ModelCCApi.edmx.diagram">
-      <DependentUpon>ModelCCApi.edmx</DependentUpon>
+    <Content Include="Models\ModelCC.edmx.diagram">
+      <DependentUpon>ModelCC.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
@@ -289,6 +290,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ContentNegotiators\" />
     <Folder Include="imagenes\" />
   </ItemGroup>
   <ItemGroup>

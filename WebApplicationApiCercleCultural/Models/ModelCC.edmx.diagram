@@ -4,20 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5ba0c02e9cec497a81ffcd08bc68909e" Name="Diagram1">
+      <Diagram DiagramId="2eb05ebe6c6a4058a32bf4fa4a1335ea" Name="Diagram1">
         <EntityTypeShape EntityType="CercleCulturalModel.Esdeveniment" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CercleCulturalModel.Espai" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="CercleCulturalModel.Mensajes" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CercleCulturalModel.Reserva" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="CercleCulturalModel.Seients" Width="1.5" PointX="7.5" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CercleCulturalModel.Usuari" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
-        <AssociationConnector Association="CercleCulturalModel.FK__Esdevenim__espai__4316F928" ManuallyRouted="false" />
-        <AssociationConnector Association="CercleCulturalModel.FK__Esdevenim__usuar__440B1D61" ManuallyRouted="false" />
-        <AssociationConnector Association="CercleCulturalModel.FK__Reserva__esdeven__5441852A" ManuallyRouted="false" />
-        <AssociationConnector Association="CercleCulturalModel.FK__Reserva__espai_i__534D60F1" ManuallyRouted="false" />
-        <AssociationConnector Association="CercleCulturalModel.FK__Seients__espai_i__4AB81AF0" ManuallyRouted="false" />
-        <AssociationConnector Association="CercleCulturalModel.FK__Mensajes__usuari__5CD6CB2B" ManuallyRouted="false" />
-        <AssociationConnector Association="CercleCulturalModel.FK__Reserva__usuari___52593CB8" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CercleCulturalModel.Usuari" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <AssociationConnector Association="CercleCulturalModel.FK__Esdevenim__espai__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="CercleCulturalModel.FK__Esdevenim__usuar__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="CercleCulturalModel.FK__Reserva__esdeven__4D94879B" ManuallyRouted="false" />
+        <AssociationConnector Association="CercleCulturalModel.FK__Reserva__espai_i__4E88ABD4" ManuallyRouted="false" />
+        <AssociationConnector Association="CercleCulturalModel.FK__Seients__espai_i__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="CercleCulturalModel.FK__Mensajes__usuari__4CA06362" ManuallyRouted="false" />
+        <AssociationConnector Association="CercleCulturalModel.FK__Reserva__usuari___4F7CD00D" ManuallyRouted="false" />
         <AssociationConnector Association="CercleCulturalModel.ReservaSeient" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

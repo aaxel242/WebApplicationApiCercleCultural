@@ -19,7 +19,7 @@ namespace WebApplicationApiCercleCultural.Controllers
 {
     public class UsuarisController : ApiController
     {
-        private CercleCulturalEntities2 db = new CercleCulturalEntities2();
+        private CercleCulturalEntities3 db = new CercleCulturalEntities3();
 
         public UsuarisController()
         {

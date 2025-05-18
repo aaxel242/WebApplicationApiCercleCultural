@@ -15,7 +15,7 @@ namespace WebApplicationApiCercleCultural.Controllers
 {
     public class EspaisController : ApiController
     {
-        private CercleCulturalEntities2 db = new CercleCulturalEntities2();
+        private CercleCulturalEntities3 db = new CercleCulturalEntities3();
 
         // GET: api/Espais
 

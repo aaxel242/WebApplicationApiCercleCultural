@@ -16,7 +16,7 @@ namespace WebApplicationApiCercleCultural.Controllers
 {
     public class ReservasController : ApiController
     {
-        private CercleCulturalEntities2 db = new CercleCulturalEntities2();
+        private CercleCulturalEntities3 db = new CercleCulturalEntities3();
 
         public ReservasController()
         {
@@ -102,66 +102,61 @@ namespace WebApplicationApiCercleCultural.Controllers
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateException ex)
             {
-                if (!ReservaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                var msg = ex.InnerException?.InnerException?.Message ?? ex.Message;
+                return InternalServerError(new Exception(msg));
             }
+
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Reservas
-        [ResponseType(typeof(Reserva))]
+        [HttpPost, ResponseType(typeof(Reserva))]
         public async Task<IHttpActionResult> PostReserva([FromBody] ReservaRequest req)
         {
-            if (req == null || !ModelState.IsValid)
-                return BadRequest("Datos de reserva inválidos");
-
-            // Validación manual de campos críticos
-            if (req.usuari_id <= 0 || req.esdeveniment_id <= 0 || req.espai_id <= 0)
-                return BadRequest("IDs de usuario, evento o espacio no válidos");
-
-            if (req.dataInici >= req.dataFi)
-                return BadRequest("La fecha de inicio debe ser anterior a la de fin");
-
-            try
-            {
-                // Mapea manualmente de DTO a entidad
-                var reserva = new Reserva
+            // Mapeo directo a entidad
+            var nueva = new Reserva
             {
                 usuari_id = req.usuari_id,
-                esdeveniment_id = req.esdeveniment_id,
-                espai_id = req.espai_id,
                 dataReserva = req.dataReserva,
                 estat = req.estat,
                 tipus = req.tipus,
+                espai_id = req.espai_id,
+                esdeveniment_id = req.esdeveniment_id,
                 dataInici = req.dataInici,
                 dataFi = req.dataFi,
                 numPlaces = req.numPlaces
             };
 
-            db.Reserva.Add(reserva);
-            await db.SaveChangesAsync();
+            try
+            {
+                db.Reserva.Add(nueva);
+                await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = reserva.id }, reserva);
+                return CreatedAtRoute(
+                    "DefaultApi",
+                    new { controller = "Reservas", id = nueva.id },
+                    nueva
+                );
+            }
+            catch (DbUpdateException ex)
+            {
+                // Extrae el mensaje raíz de la excepción
+                var msg = ex.InnerException?.InnerException?.Message ?? ex.Message;
+                // Devuelve 500 con texto de error
+                return Content(
+                    HttpStatusCode.InternalServerError,
+                    new { Error = msg }
+                );
+            }
         }
 
-        catch (DbUpdateException ex)
-         {
-        // Log del error (ex.InnerException.Message)
-        return InternalServerError(new Exception("Error al guardar en base de datos"));
-          }
-}
 
-// DELETE: api/Reservas/5
-[ResponseType(typeof(Reserva))]
+
+
+        // DELETE: api/Reservas/5
+        [ResponseType(typeof(Reserva))]
         public async Task<IHttpActionResult> DeleteReserva(int id)
         {
             Reserva reserva = await db.Reserva.FindAsync(id);
