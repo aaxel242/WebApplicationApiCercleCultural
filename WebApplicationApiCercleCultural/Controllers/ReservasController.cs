@@ -16,7 +16,7 @@ namespace WebApplicationApiCercleCultural.Controllers
 {
     public class ReservasController : ApiController
     {
-        private CercleCulturalEntities3 db = new CercleCulturalEntities3();
+        private CercleCulturalEntities4 db = new CercleCulturalEntities4();
 
         public ReservasController()
         {
@@ -183,6 +183,17 @@ namespace WebApplicationApiCercleCultural.Controllers
         private bool ReservaExists(int id)
         {
             return db.Reserva.Count(e => e.id == id) > 0;
+        }
+
+        // GET: api/Reservas/TotalReservasEvento/5
+        [HttpGet]
+        [Route("api/Reservas/TotalReservasEvento/{eventId}")]
+        public IHttpActionResult GetTotalReservasPorEvento(int eventId)
+        {
+            var total = db.Reserva
+                          .Where(r => r.esdeveniment_id == eventId)
+                          .Sum(r => (int?)r.numPlaces) ?? 0;
+            return Ok(new { eventId, total });
         }
     }
 }

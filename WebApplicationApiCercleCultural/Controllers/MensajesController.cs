@@ -14,7 +14,7 @@ namespace WebApplicationApiCercleCultural.Controllers
     public class MensajesController : ApiController
     {
 
-        private CercleCulturalEntities3 db = new CercleCulturalEntities3();
+        private CercleCulturalEntities4 db = new CercleCulturalEntities4();
 
         public MensajesController()
         {

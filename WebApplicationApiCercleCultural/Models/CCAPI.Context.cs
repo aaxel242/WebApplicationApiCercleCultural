@@ -13,10 +13,10 @@ namespace WebApplicationApiCercleCultural.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class CercleCulturalEntities3 : DbContext
+    public partial class CercleCulturalEntities4 : DbContext
     {
-        public CercleCulturalEntities3()
-            : base("name=CercleCulturalEntities3")
+        public CercleCulturalEntities4()
+            : base("name=CercleCulturalEntities4")
         {
         }
     

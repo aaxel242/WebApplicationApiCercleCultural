@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Http.ModelBinding;
 using WebApplicationApiCercleCultural.Models;
 using WebApplicationApiCercleCultural.Models.DTOs;
 using WebApplicationApiCercleCultural.Services;
@@ -19,7 +20,7 @@ namespace WebApplicationApiCercleCultural.Controllers
 {
     public class UsuarisController : ApiController
     {
-        private CercleCulturalEntities3 db = new CercleCulturalEntities3();
+        private CercleCulturalEntities4 db = new CercleCulturalEntities4();
 
         public UsuarisController()
         {
@@ -281,7 +282,24 @@ namespace WebApplicationApiCercleCultural.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError(ex);
+                // 1) Recojo el mensaje raíz y los InnerExceptions
+                Exception e = ex;
+                var messages = new List<string>();
+                while (e != null)
+                {
+                    messages.Add(e.Message);
+                    e = e.InnerException;
+                }
+
+                // 2) Construyo objeto de error custom
+                var errorPayload = new
+                {
+                    Error = "Error al guardar imagen",
+                    Details = messages
+                };
+
+                // 3) Devuelvo 500 con JSON explícito
+                return Content(HttpStatusCode.InternalServerError, errorPayload);
             }
         }
 
@@ -313,6 +331,46 @@ namespace WebApplicationApiCercleCultural.Controllers
                 return InternalServerError(ex);
             }
         }
+
+        [HttpPut]
+        [Route("api/Usuaris/ActualizarIdioma/{id}")]
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutUsuariActualizarIdioma(int id, IdiomaDTO idiomaDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Usuari usuarioExistente = await db.Usuari.FindAsync(id);
+            if (usuarioExistente == null)
+            {
+                return NotFound();
+            }
+
+            // Actualizar solo el idioma
+            usuarioExistente.idioma = idiomaDTO.idioma;
+
+            db.Entry(usuarioExistente).State = EntityState.Modified;
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuariExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
     }
 
     // Clase auxiliar para devolver el FileStream
@@ -336,5 +394,8 @@ namespace WebApplicationApiCercleCultural.Controllers
             response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(_mediaType);
             return Task.FromResult(response);
         }
+
+      
+
     }
 }
